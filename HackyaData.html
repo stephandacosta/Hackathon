@@ -6,7 +6,7 @@
     <!-- <link rel="stylesheet" href="styles/styles.css"> -->
 
     <!-- dependencies -->
-    <!-- // <script src="bower_components/jquery/jquery.min.js"></script> -->
+    <script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
 
     <!-- // <script src="bower_components/underscore/underscore.js"></script> -->
 
@@ -15,26 +15,36 @@
     <!-- // <script src="scripts/app.js"></script> -->
   </head>
   <body>
-<!--
-     <script>
-    /* global $, app */
-      $(function(){
-        app.init();
-      });
-    </script>
--->
+
+
 
     <div id="main">
       <h1>HACKYADATA</h1>
 
       <form>
-        <input type="text" name="Paste and ENTER" id="message"/>
+        <input type="text" name="Paste and ENTER" id="box"/>
       </form>
 
       <div id="Chart">Charts</div>
 
       <div id="Data">Data View</div>
 
+
     </div>
+     <script>
+      $(function(){
+
+        $( "#box" ).keydown(function(event) {
+           console.log(event.which);
+          if(event.which === 13){
+            console.log("should log");
+            event.preventDefault();
+            var data = $( "#box" ).val();
+            console.log(data);
+          }
+        });
+      });
+
+    </script>
   </body>
 </html>
