@@ -40,7 +40,8 @@
             console.log("should log");
             event.preventDefault();
             var data = $( "#box" ).val();
-            console.log(data);
+            var newdata = data.split('\t');
+            console.log(newdata);
           }
         });
       });
