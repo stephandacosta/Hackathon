@@ -88,6 +88,7 @@ $(function(){
         }
       }
     }
+    return isDate;
   };
 
 
@@ -109,16 +110,34 @@ $(function(){
       isMetric = categorizeMetrics(dataArr);
       isDate = categorizeDates(dataArr);
 
+       console.log(isMetric);
+      console.log(isDate);
+
 
         console.log(dataArr.length);
+
+        var newtext;
       for (var i = 0 ; i < dataArr.length; i++){
         console.log("it works");
         var $field = $("<li>");
+        $field.addClass("list-group-item list-group-item-success");
         $field.text(dataArr[i][0]);
+        if (isMetric[i]){
+          $field.addClass("list-group-item list-group-item-danger");
+          newtext = $field.text() + "  - Metric";
+          $field.text(newtext);
+        } else {
+          if (isDate[i]){
+            $field.addClass("list-group-item list-group-item-info");
+            newtext = $field.text() + "  - Date";
+            $field.text(newtext);
+          } else {
+            $field.addClass("list-group-item list-group-item-warning");
+            newtext = $field.text() + "  - Dimension";
+            $field.text(newtext);
+          }
+        }
         $("#Fields").append($field);
-        // if (isMetric[i]){
-
-        // }
       }
 
       // $("#Charts").append("<p>");
@@ -176,8 +195,5 @@ $(function(){
       //     .attr("cx", Math.random() * (board.attr("width") - 4 * r) + 2 * r)
       //     .attr("cy", Math.random() * (board.attr("height") - 4 * r) + 2 * r);
       // }
-
-
-
 
 

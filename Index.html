@@ -1,23 +1,25 @@
 <!doctype html>
 <html>
-  <head>
+  <head lang="en">
     <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>HACKYADATA</title>
 
     <!-- <link rel="stylesheet" href="styles/styles.css"> -->
 
      <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
 
-    <!-- Optional theme -->
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+    <!-- Optional theme
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">  -->
 
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 
 
     <!-- dependencies -->
     <script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <link rel="stylesheet" type="text/css" href="lib/C3/c3.css">
     <script src="lib/C3/c3.min.js"></script>
@@ -33,10 +35,10 @@
       <h1>HACKYADATA</h1>
 
       <div id = "Margin" style="width:200px;height:900px;float:left;">
-        <ul id = "Fields"></ul>
+        <ul id = "Fields" class="list-group"></ul>
       </div>
 
-      <div id = "content" style="height:900px;float:left;">
+      <div id = "content" style="height:900px;float:left;padding-left:40px;">
         <div>Paste and Enter Data</div>
         <input type="text" id="box"/>
 
