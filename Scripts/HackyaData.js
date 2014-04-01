@@ -37,7 +37,7 @@ $(function(){
     return result;
   };
 
-  var pivotedData = function(matrix){
+  var pivotDataObj = function(matrix){
     var main = [];
     var obj;
     for (var record = 1; record < matrix.length ; record++){
@@ -50,6 +50,20 @@ $(function(){
     return main;
   };
 
+  var pivotDataArr = function(matrix){
+    var main = [];
+    var arr;
+    for (var field = 0 ; field < matrix[0].length ; field++){
+        arr = [];
+        for (var record = 0; record < matrix.length ; record++){
+          arr.push(matrix[record][field]);
+      }
+      main.push(arr);
+    }
+    return main;
+  };
+
+
 
   // keydown event trigger
   $( "#box" ).keydown(function(event) {
@@ -61,8 +75,29 @@ $(function(){
       $( "#box" ).val('');
 
       var columns = fieldnum(data);
-      var parsedData = pivotedData(parsedString(data, columns));
-      var rows = parsedData.length;
+      var dataObj = pivotDataObj(parsedString(data, columns));
+      var dataArr = pivotDataArr(parsedString(data, columns));
+      var rows = dataObj.length;
+
+      console.log(dataArr);
+
+
+      $('body').append($('<div id="chart" >').css("height","150px").css("width","300px"));
+
+
+      var chart = c3.generate({
+        bindto: '#chart',
+        data: {
+          columns: [
+            ['y', 100, 200, 300, 400, 150, 250]
+          ]
+        }
+      });
+
+
+
+
+
 
     }
 
@@ -74,12 +109,12 @@ $(function(){
 });
 
   // Create chart area
-  var boardW = 0.5 * window.innerWidth;
-  var boardH = 0.5 * window.innerHeight;
-  var board = d3.select("body").append("svg")
-    .attr("class", "board")
-    .attr("width", boardW)
-    .attr("height", boardH);
+  // var boardW = 0.5 * window.innerWidth;
+  // var boardH = 0.5 * window.innerHeight;
+  // var board = d3.select("body").append("svg")
+  //   .attr("class", "board")
+  //   .attr("width", boardW)
+  //   .attr("height", boardH);
 
 
 
