@@ -116,6 +116,8 @@ $(function(){
 
         console.log(dataArr.length);
 
+
+      // updates field list
         var newtext;
       for (var i = 0 ; i < dataArr.length; i++){
         console.log("it works");
@@ -152,6 +154,39 @@ $(function(){
           ]
         }
       });
+
+  // Create chart area
+  // var boardW = 0.5 * window.innerWidth;
+  // var boardH = 0.5 * window.innerHeight;
+  // var board = d3.select("body").append("svg")
+  //   .attr("class", "board")
+  //   .attr("width", boardW)
+  //   .attr("height", boardH);
+
+
+      var barWidth = 40;
+      var width = (barWidth + 10) * dataObj.length;
+      var height = 200;
+
+      var x = d3.scale.linear().domain([0, dataObj.length]).range([0, width]);
+      var y = d3.scale.linear().domain([0, d3.max(dataObj, function(d) { return d.Metr2; })])
+        .rangeRound([0, height]);
+
+      var barDemo = d3.select("#Charts").
+      append("svg:svg").
+      attr("width", width).
+      attr("height", height);
+
+
+      barDemo.selectAll("rect").data(dataObj).enter()
+        .append("svg:rect")
+        .attr("x",function(d, i){return x(i);})
+        .attr("y",function(d){return height - y(d.Metr2);})
+        .attr("dy",function(d){return y(d.(Math.abs(Metr2)));})
+        .attr("width", barWidth)
+        .attr("fill", "#2d578b");
+
+
 
 
 
