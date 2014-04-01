@@ -185,7 +185,13 @@ $(function(){
     var barWidth = width / (watObj.length) - gap;
 
     var x = d3.scale.linear().domain([0, watObj.length]).range([0, width]);
-    var y = d3.scale.linear().domain([0, d3.max(watObj, function(d) { return d[field]; })])
+    var y = d3.scale.linear().domain([0, d3.max(watObj, function(d) {
+        if (Object.keys(d["previous"]).length === 0){
+          return Number(d[field]);
+        } else {
+          return Number(d[field])+Number(d["previous"][field]);
+        }
+      })])
       .rangeRound([0, height]);
 
     var chartArea = d3.selectAll($div)
@@ -198,17 +204,20 @@ $(function(){
       .append("svg:rect")
       .attr("x",function(d, i){return x(i);})
       .attr("y",function(d){
+        if (Object.keys(d["previous"]).length === 0){
+          return height - y(d[field]);
+        }
         if(d[field] >= 0 ){
-          return height - y(d["previous"][field] + d[field]);
+          return height - y(Number(d["previous"][field]) + Number(d[field]));
         } else {
-          return height - y(d["previous"][field]);
+          return height - y(Number(d["previous"][field]));
         }
       })
       .attr("height",function(d){
         if(d[field] >= 0){
-          return y(d[field]);
+          return y(Number(d[field]));
         } else {
-          return y(-d[field]);
+          return y(Number(-d[field]));
         }
       })
       .attr("width", barWidth)
@@ -217,9 +226,13 @@ $(function(){
 
    };
 
-    console.log(dataObj);
-    console.log(waterFallObj(dataObj));
-   makeWaterfall($("#Charts"), waterFallObj(dataObj), 10, "Metr2");
+    // console.log(dataObj);
+    // console.log(waterFallObj(dataObj));
+
+
+    makeWaterfall($("#Charts"), waterFallObj(dataObj), 10, "Metr2");
+
+
 
 
 
