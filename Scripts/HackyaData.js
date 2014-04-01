@@ -63,6 +63,33 @@ $(function(){
     return main;
   };
 
+  var categorizeMetrics = function (matrix){
+    var isMetric = [];
+    for (var i = 0 ; i< matrix.length ; i++){
+      isMetric[i] = true;
+      for (var j = 1 ; j< matrix[i].length  && j<10 ; j++){
+        if (isNaN(matrix[i][j]) || matrix[i][j]==='') {
+          isMetric[i]=false;
+        }
+      }
+    }
+    return isMetric;
+  };
+
+
+  var categorizeDates = function (matrix){
+    var isDate = [];
+    for (var i = 0 ; i< matrix.length ; i++){
+      isDate[i] = true;
+      for (var j = 1 ; j< matrix[i].length  && j<10 ; j++){
+        test = Date.parse(matrix[i][j]);
+        if (isNaN(test) || test<0) {
+          isDate[i]=false;
+        }
+      }
+    }
+  };
+
 
 
   // keydown event trigger
@@ -79,14 +106,27 @@ $(function(){
       var dataArr = pivotDataArr(parsedString(data, columns));
       var rows = dataObj.length;
 
-      console.log(dataArr);
+      isMetric = categorizeMetrics(dataArr);
+      isDate = categorizeDates(dataArr);
 
 
-      $('body').append($('<div id="chart" >').css("height","150px").css("width","300px"));
+        console.log(dataArr.length);
+      for (var i = 0 ; i < dataArr.length; i++){
+        console.log("it works");
+        var $field = $("<li>");
+        $field.text(dataArr[i][0]);
+        $("#Fields").append($field);
+        // if (isMetric[i]){
+
+        // }
+      }
+
+      // $("#Charts").append("<p>");
+      $("#Charts").append($('<div id="render" >').css("height","150px").css("width","300px"));
 
 
       var chart = c3.generate({
-        bindto: '#chart',
+        bindto: '#render',
         data: {
           columns: [
             ['y', 100, 200, 300, 400, 150, 250]
