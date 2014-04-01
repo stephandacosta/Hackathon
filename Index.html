@@ -23,6 +23,7 @@
     <script src="http://d3js.org/d3.v3.min.js"></script>
     <link rel="stylesheet" type="text/css" href="lib/C3/c3.css">
     <script src="lib/C3/c3.min.js"></script>
+    <script src="lib/raphael-min.js"></script>
 
 
 
@@ -34,18 +35,28 @@
     <div id="main">
       <h1>HACKYADATA</h1>
 
-      <div id = "Margin" style="width:200px;height:900px;float:left;">
+      <div id = "Margin" style="width:200px;height:900px;float:left;padding-top:60px">
         <ul id = "Fields" class="list-group"></ul>
       </div>
 
       <div id = "content" style="height:900px;float:left;padding-left:40px;">
-        <div>Paste and Enter Data</div>
-        <input type="text" id="box"/>
-
         <p/>
-        <div id="Charts" style="height:500px;width:800px">Charts</div>
+        <ul class="nav nav-pills">
+          <li class="active"><a href="#">Waterfall</a></li>
+          <li><a href="#">Histogram</a></li>
+          <li><a href="#">Scatterplot</a></li>
+          <li><a href="#">Clustered Stacked Bars</a></li>
+        </ul>
 
-        <div id="Data">Data View</div>
+
+        <div id="pasteSignal" style="padding-top:50px;font-size:xx-large;">
+          Paste Data Anywhere
+          <!-- <span class=​"glyphicon-class">​Paste Data</span>​ -->
+        </div>
+
+        <div id="Charts" style="height:500px;width:800px;visibility:hidden;"></div>
+
+        <div id="Data" style="padding-top:50px;visibility:hidden;">Data View</div>
 
       </div>
 

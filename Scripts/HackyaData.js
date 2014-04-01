@@ -1,41 +1,9 @@
 
 $(function(){
 
-  // checks number of fields
-  var fieldnum = function (str){
-    var array = str.split('\t');
-    for (var i = 0 ; i<array.length ; i++){
-      for (var j = 0 ; j<array[i].length ; j++){
-        if (array[i].charCodeAt(j) === 32){
-          return i+1;
-        }
-      }
-    }
-  };
+  // var icon = paper.path(M8.125,29.178l1.311-1.5l1.315,1.5l1.311-1.5l1.311,1.5l1.315-1.5l1.311,1.5l1.312-1.5l1.314,1.5l1.312-1.5l1.312,1.5l1.314-1.5l1.312,1.5v-8.521H8.125V29.178zM23.375,17.156c-0.354,0-5.833-0.166-5.833-2.917s0.75-8.834,0.75-8.834S18.542,2.822,16,2.822s-2.292,2.583-2.292,2.583s0.75,6.083,0.75,8.834s-5.479,2.917-5.833,2.917c-0.5,0-0.5,1.166-0.5,1.166v1.271h15.75v-1.271C23.875,18.322,23.875,17.156,23.375,17.156zM16,8.031c-0.621,0-1.125-2.191-1.125-2.812S15.379,4.094,16,4.094s1.125,0.504,1.125,1.125S16.621,8.031,16,8.031z).attr({fill: "#000", stroke: "none"});
+  // $("pasteSignal").append(icon);
 
-  // parses to 2-dimensional array
-  var parsedString = function (str, columns){
-    var result = [];
-    var array = str.split('\t');
-
-    var row = [];
-    var left, right;
-    var count = 0;
-    for (var i = 0 ; i < array.length ; i++){
-      if ( (count+1) % columns){
-        row.push(array[i].substr());
-        count ++;
-      } else {
-        left = array[i].slice(0,array[i].indexOf(' '));
-        right = array[i].slice(array[i].indexOf(' ')+1);
-        row.push(left);
-        result.push(row);
-        row = [right];
-        count = 1;
-      }
-    }
-    return result;
-  };
 
   var pivotDataObj = function(matrix){
     var main = [];
@@ -50,6 +18,7 @@ $(function(){
     return main;
   };
 
+
   var pivotDataArr = function(matrix){
     var main = [];
     var arr;
@@ -62,6 +31,7 @@ $(function(){
     }
     return main;
   };
+
 
   var categorizeMetrics = function (matrix){
     var isMetric = [];
@@ -175,100 +145,69 @@ $(function(){
       .attr("width", barWidth)
       .attr("fill", "#2d578b");
 
-   };
+  };
 
-  // keydown event trigger
-  $( "#box" ).keydown(function(event) {
 
-    if(event.which === 13){
-      event.preventDefault();
-      var data = $( "#box" ).val();
-      $( "#box" ).val('');
 
-      var columns = fieldnum(data);
-      var dataObj = pivotDataObj(parsedString(data, columns));
-      var dataArr = pivotDataArr(parsedString(data, columns));
-      var rows = dataObj.length;
+  document.body.onpaste = function(e) {
+    var data = e.clipboardData.getData("Text");
+    e.preventDefault();
 
-      isMetric = categorizeMetrics(dataArr);
-      isDate = categorizeDates(dataArr);
+    var parsedData = [];
+    var temp = data.split('\n');
+    for (var k = 0 ; k < temp.length ; k++){
+      parsedData.push(temp[k].split('\t'));
+    }
 
-      // updates field list
-        var newtext;
-      for (var i = 0 ; i < dataArr.length; i++){
-        var $field = $("<li>");
-        $field.addClass("list-group-item list-group-item-success");
-        $field.text(dataArr[i][0]);
-        if (isMetric[i]){
-          $field.addClass("list-group-item list-group-item-danger");
-          newtext = $field.text() + "  - Metric";
+    var dataObj = pivotDataObj(parsedData);
+    var dataArr = pivotDataArr(parsedData);
+    var rows = dataObj.length;
+
+    isMetric = categorizeMetrics(dataArr);
+    isDate = categorizeDates(dataArr);
+
+    // updates field list
+    var newtext;
+    for (var i = 0 ; i < dataArr.length; i++){
+      var $field = $("<li>");
+      $field.addClass("list-group-item list-group-item-success");
+      $field.text(dataArr[i][0]);
+      if (isMetric[i]){
+        $field.addClass("list-group-item list-group-item-danger");
+        newtext = $field.text() + "  - Metric";
+        $field.text(newtext);
+      } else {
+        if (isDate[i]){
+          $field.addClass("list-group-item list-group-item-info");
+          newtext = $field.text() + "  - Date";
           $field.text(newtext);
         } else {
-          if (isDate[i]){
-            $field.addClass("list-group-item list-group-item-info");
-            newtext = $field.text() + "  - Date";
-            $field.text(newtext);
-          } else {
-            $field.addClass("list-group-item list-group-item-warning");
-            newtext = $field.text() + "  - Dimension";
-            $field.text(newtext);
-          }
+          $field.addClass("list-group-item list-group-item-warning");
+          newtext = $field.text() + "  - Dimension";
+          $field.text(newtext);
         }
-        $("#Fields").append($field);
       }
+      $("#Fields").append($field);
+    }
 
 
-    console.log(dataObj);
+    // console.log(dataObj);
     // console.log(waterFallObj(dataObj));
+    $("#pasteSignal").text("Paste more data...");
+    $("#pasteSignal").fadeOut(5000);
+    $("#Charts").css("visibility","visible");
 
     makeWaterfall($("#Charts"), waterFallObj(dataObj), 10, "Stephan");
 
 
 
 
-
-
-
-
-
-
-
-    }
-
-  });
-
+  };
 
 
 
 });
 
-  // Create chart area
-  // var boardW = 0.5 * window.innerWidth;
-  // var boardH = 0.5 * window.innerHeight;
-  // var board = d3.select("body").append("svg")
-  //   .attr("class", "board")
-  //   .attr("width", boardW)
-  //   .attr("height", boardH);
 
-
-
-
-      // board.selectAll("circle").data(points).enter()
-      //   .append("circle")
-      //   .attr("cx",function(d){return d.Axis1;})
-      //   .attr("cy",function(d){return d.Axis2;})
-      //   .attr("r",10);
-
-
-      // Generate data points
-      // var r = 10;
-      // for(var i = 0; i < 5; i++) {
-      //   board.append("circle")
-      //     .attr("class", "enemy")
-      //     .attr("r", r)
-      //     .attr("fill", "black")
-      //     .attr("cx", Math.random() * (board.attr("width") - 4 * r) + 2 * r)
-      //     .attr("cy", Math.random() * (board.attr("height") - 4 * r) + 2 * r);
-      // }
 
 
