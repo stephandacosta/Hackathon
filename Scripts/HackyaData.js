@@ -129,7 +129,15 @@ $(function(){
     var barWidth = width / (watObj.length) - gap;
 
     var x = d3.scale.linear().domain([0, watObj.length]).range([0, width]);
-    var y = d3.scale.linear().domain([0, d3.max(watObj, function(d) {
+    var y = d3.scale.linear().domain([
+      Math.min(0,d3.min(watObj, function(d) {
+        if (Object.keys(d["cumPrevious"]).length === 0){
+          return Number(d[field]);
+        } else {
+          return Number(d[field])+Number(d["cumPrevious"][field]);
+        }
+      })),
+      d3.max(watObj, function(d) {
         if (Object.keys(d["cumPrevious"]).length === 0){
           return Number(d[field]);
         } else {
@@ -209,21 +217,11 @@ $(function(){
         $("#Fields").append($field);
       }
 
-      // $("#Charts").append($('<div id="render" >').css("height","150px").css("width","300px"));
 
+    console.log(dataObj);
+    // console.log(waterFallObj(dataObj));
 
-      // var chart = c3.generate({
-      //   bindto: '#render',
-      //   data: {
-      //     columns: [
-      //       ['y', 100, 200, 300, 400, 150, 250]
-      //     ]
-      //   }
-      // });
-
-
-
-    makeWaterfall($("#Charts"), waterFallObj(dataObj), 10, "Metr2");
+    makeWaterfall($("#Charts"), waterFallObj(dataObj), 10, "Stephan");
 
 
 
