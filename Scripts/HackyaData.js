@@ -1,9 +1,6 @@
 
 $(function(){
 
-  // var icon = paper.path(M8.125,29.178l1.311-1.5l1.315,1.5l1.311-1.5l1.311,1.5l1.315-1.5l1.311,1.5l1.312-1.5l1.314,1.5l1.312-1.5l1.312,1.5l1.314-1.5l1.312,1.5v-8.521H8.125V29.178zM23.375,17.156c-0.354,0-5.833-0.166-5.833-2.917s0.75-8.834,0.75-8.834S18.542,2.822,16,2.822s-2.292,2.583-2.292,2.583s0.75,6.083,0.75,8.834s-5.479,2.917-5.833,2.917c-0.5,0-0.5,1.166-0.5,1.166v1.271h15.75v-1.271C23.875,18.322,23.875,17.156,23.375,17.156zM16,8.031c-0.621,0-1.125-2.191-1.125-2.812S15.379,4.094,16,4.094s1.125,0.504,1.125,1.125S16.621,8.031,16,8.031z).attr({fill: "#000", stroke: "none"});
-  // $("pasteSignal").append(icon);
-
 
   var pivotDataObj = function(matrix){
     var main = [];
@@ -92,7 +89,8 @@ $(function(){
 
 
 
-  var makeWaterfall = function ($div, watObj, gap, field){
+  var makeWaterfall = function ($div, watObj, gap, field, keys){
+
 
     var height = $div.height();
     var width = $div.width();
@@ -117,9 +115,36 @@ $(function(){
       .rangeRound([0, height]);
 
     var chartArea = d3.selectAll($div)
-    .append("svg:svg")
+    .append("svg")
+    .style({'padding-top':40, 'padding-bottom': 20})
     .attr("width", width)
     .attr("height", height);
+
+    var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom");
+    // .tickValues(keys);
+
+    chartArea.append("g")
+      .attr("class", "x axis")
+      .attr("transform","translate(0," + height + ")")
+      .call(xAxis);
+
+    chartArea.append("text")
+        .attr("x", width / 2)
+        .attr("y", -10)
+        .attr("text-anchor", "middle")
+        .style("font-size", "16px")
+        .style("text-decoration", "underline")
+        .text(field);
+
+    // d3.selectAll("svg")
+    // .append("g")
+    // .attr("transform", "translate(0," + (height) + ")")
+    // .call(d3.svg.axis()
+    //             // .scale.ordinal()
+    //             .tickValues(keys));
+
 
 
     chartArea.selectAll("rect").data(watObj).enter()
@@ -143,7 +168,13 @@ $(function(){
         }
       })
       .attr("width", barWidth)
-      .attr("fill", "#2d578b");
+      .attr("fill", function(d){
+        if(d[field] >= 0){
+          return "green";}
+        else {
+          return "red";
+        }
+      });
 
   };
 
@@ -193,11 +224,18 @@ $(function(){
 
     // console.log(dataObj);
     // console.log(waterFallObj(dataObj));
-    $("#pasteSignal").text("Paste more data...");
-    $("#pasteSignal").fadeOut(5000);
     $("#Charts").css("visibility","visible");
+    $("#pasteSignal").remove();
+    $("#msg").text("Paste more data...");
+    $("#msg").fadeOut(5000);
 
-    makeWaterfall($("#Charts"), waterFallObj(dataObj), 10, "Stephan");
+    xAxis = dataArr[0].slice(1);
+
+    for (var i = 0 ; i < isMetric.length ; i++){
+      if(isMetric[i]){
+        makeWaterfall($("#Charts"), waterFallObj(dataObj), 10, dataArr[i][0], xAxis);
+      }
+    }
 
 
 
