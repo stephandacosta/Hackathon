@@ -91,12 +91,32 @@ $(function(){
 
   var makeWaterfall = function ($div, watObj, gap, field, keys){
 
+    var dragmove = function() {
+      console.log("drag");
+      d3.select(this)
+        .attr("x", d3.event.x)
+        .attr("y", d3.event.y);
+    };
+    var drag = d3.behavior.drag().on("drag", dragmove);
+
+    // var keyDownSet = function(){
+    //   var temp = String.fromCharCode(event.keyCode);
+    //   this.text(temp);
+    // };
+
+    var keydown = d3.select('body').on("keydown", function(){
+      console.log (event.keyCode);
+    });
 
     var height = $div.height();
     var width = $div.width();
     var barWidth = width / (watObj.length) - gap;
 
     var x = d3.scale.linear().domain([0, watObj.length]).range([0, width]);
+    // var x = d3.scale.ordinal();
+
+    // x.domain(keys);
+
     var y = d3.scale.linear().domain([
       Math.min(0,d3.min(watObj, function(d) {
         if (Object.keys(d["cumPrevious"]).length === 0){
@@ -120,10 +140,12 @@ $(function(){
     .attr("width", width)
     .attr("height", height);
 
+// console.log(keys);
+
     var xAxis = d3.svg.axis()
     .scale(x)
+    // .tickValues(function(d) (return keys[d])
     .orient("bottom");
-    // .tickValues(keys);
 
     chartArea.append("g")
       .attr("class", "x axis")
@@ -137,6 +159,15 @@ $(function(){
         .style("font-size", "16px")
         .style("text-decoration", "underline")
         .text(field);
+
+    chartArea.append("text")
+    .attr("x", width * 1.5)
+    .attr("y", height/2)
+    .attr("text-anchor", "middle")
+    .style("font-size", "32px")
+    .style("text-decoration", "underline")
+    .text("Edit Comment");
+
 
     // d3.selectAll("svg")
     // .append("g")
@@ -174,7 +205,11 @@ $(function(){
         else {
           return "red";
         }
-      });
+      })
+      .call(drag);
+
+
+
 
   };
 
@@ -222,8 +257,6 @@ $(function(){
     }
 
 
-    // console.log(dataObj);
-    // console.log(waterFallObj(dataObj));
     $("#Charts").css("visibility","visible");
     $("#pasteSignal").remove();
     $("#msg").text("Paste more data...");
